@@ -27,6 +27,12 @@ jobs:
         timeout-minutes: 10
         run: docker compose build
 
+      - name: Check directories
+        run: ls -f
+      
+      - name: Check scripts
+        run: ls -f scripts
+
       - name: Run containers
         timeout-minutes: 5
         run: |

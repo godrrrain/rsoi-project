@@ -1,0 +1,55 @@
+version: "3"
+services:
+  postgres:
+    image: library/postgres:13
+    container_name: postgres-1
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./postgres/:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+
+# TODO добавить сервисы
+  gateway-service:
+    build:
+      context: ./
+      dockerfile: ./src/gateway-service/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
+  reservation-service:
+    build:
+      context: ./
+      dockerfile: ./src/reservation-service/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8070:8070"
+
+  library-service:
+    build:
+      context: ./
+      dockerfile: ./src/library-service/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8060:8060"
+
+  rating-service:
+    build:
+      context: ./
+      dockerfile: ./src/rating-service/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8050:8050"
+
+volumes:
+  db-data:

@@ -41,7 +41,7 @@ jobs:
           go test ./src/reservation-service/handler
           go test ./src/rating-service/handler
 
-      # TODO setup variant, service and port
+      # TODO setup variant, service and port 
 
       - name: Run API Tests
         timeout-minutes: 5

@@ -17,11 +17,6 @@ type Rating struct {
 }
 
 type Storage interface {
-	// Insert(e *Person)
-	// Get(id int) (Person, error)
-	// Update(e *Person) error
-	// Delete(id int) error
-	// GetAll() []Person
 	GetRating(ctx context.Context, username string) (Rating, error)
 	UpdateRating(ctx context.Context, username string, stars int) error
 }
@@ -81,7 +76,6 @@ func (pg *postgres) GetRating(ctx context.Context, username string) (Rating, err
 }
 
 func (pg *postgres) UpdateRating(ctx context.Context, username string, stars int) error {
-
 	//temporary solution
 	query := fmt.Sprintf(`SELECT id, username, stars FROM rating WHERE username = '%s'`, username)
 

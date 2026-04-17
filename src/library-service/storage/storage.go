@@ -37,11 +37,6 @@ type BookInfo struct {
 }
 
 type Storage interface {
-	// Insert(e *Person)
-	// Get(id int) (Person, error)
-	// Update(e *Person) error
-	// Delete(id int) error
-	// GetAll() []Person
 	GetLibrariesByCity(ctx context.Context, city string) ([]Library, error)
 	GetBooksByLibraryUid(ctx context.Context, libraryUid string, showAll bool) ([]Book, error)
 	GetBookByUid(ctx context.Context, bookUid string) (Book, error)
@@ -219,32 +214,3 @@ func (pg *postgres) UpdateBookCondition(ctx context.Context, bookUid string, con
 
 	return nil
 }
-
-// func (pg *postgres) UpdateBookCount(ctx context.Context, bookUid string) error {
-
-// 	query := fmt.Sprintf(`SELECT id, library_uid, name, city, address FROM library WHERE library_uid = '%s'`, libraryUid)
-
-// 	rows, err := pg.db.Query(ctx, query)
-
-// 	var library Library
-
-// 	if err != nil {
-// 		fmt.Errorf("unable to query: %w", err)
-// 	}
-// 	defer rows.Close()
-
-// 	library, err = pgx.CollectOneRow(rows, pgx.RowToStructByName[Library])
-// 	if err != nil {
-// 		fmt.Printf("CollectRows error: %v", err)
-// 		return err
-// 	}
-
-// 	query := fmt.Sprintf(`UPDATE library_books SET available_count = '%s' WHERE bookUid = '%s'`, condition, bookUid)
-
-// 	_, err := pg.db.Exec(ctx, query)
-// 	if err != nil {
-// 		return fmt.Errorf("unable to insert row: %w", err)
-// 	}
-
-// 	return nil
-// }

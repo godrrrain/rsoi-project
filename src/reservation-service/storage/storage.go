@@ -27,9 +27,6 @@ type ReservationAmount struct {
 }
 
 type Storage interface {
-	// Update(e *Person) error
-	// Delete(id int) error
-	// GetAll() []Person
 	GetReservations(ctx context.Context, username string) ([]Reservation, error)
 	GetReservationByUid(ctx context.Context, reservation_uid string) (Reservation, error)
 	GetRentedReservationAmount(ctx context.Context, username string) (ReservationAmount, error)

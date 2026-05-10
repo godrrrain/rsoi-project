@@ -10,10 +10,10 @@ type Job interface {
 }
 
 type ExecJob struct {
-	f func() (interface{}, error)
+	f func() (any, error)
 }
 
-func NewExecJob(f func() (interface{}, error)) *ExecJob {
+func NewExecJob(f func() (any, error)) *ExecJob {
 	return &ExecJob{
 		f: f,
 	}

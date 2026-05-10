@@ -45,7 +45,7 @@ func (h *Handler) GetLibrariesByCity(c *gin.Context) {
 	q.Add("city", c.Query("city"))
 	req.URL.RawQuery = q.Encode()
 
-	ires, err := h.libraryCB.Execute(func() (interface{}, error) {
+	ires, err := h.libraryCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(req)
 	})
 	if err != nil {
@@ -136,7 +136,7 @@ func (h *Handler) GetBooksByLibraryUid(c *gin.Context) {
 	q.Add("showAll", c.Query("showAll"))
 	req.URL.RawQuery = q.Encode()
 
-	ires, err := h.libraryCB.Execute(func() (interface{}, error) {
+	ires, err := h.libraryCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(req)
 	})
 	if err != nil {
@@ -214,15 +214,6 @@ func (h *Handler) GetBooksByLibraryUid(c *gin.Context) {
 }
 
 func (h *Handler) GetRating(c *gin.Context) {
-	username := c.GetHeader("X-User-Name")
-
-	if username == "" {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
-		})
-		return
-	}
-
 	requestURL := fmt.Sprintf("%s/api/v1/rating/", ratingService)
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
@@ -232,9 +223,11 @@ func (h *Handler) GetRating(c *gin.Context) {
 		})
 		return
 	}
-	req.Header.Set("X-User-Name", username)
 
-	ires, err := h.ratingCB.Execute(func() (interface{}, error) {
+	authToken := c.GetHeader("Authorization")
+	req.Header.Set("Authorization", authToken)
+
+	ires, err := h.ratingCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(req)
 	})
 	if err != nil {
@@ -270,15 +263,6 @@ func (h *Handler) GetRating(c *gin.Context) {
 }
 
 func (h *Handler) GetReservations(c *gin.Context) {
-	username := c.GetHeader("X-User-Name")
-
-	if username == "" {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
-		})
-		return
-	}
-
 	requestURL := fmt.Sprintf("%s/api/v1/reservations/", reservationService)
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
@@ -288,9 +272,11 @@ func (h *Handler) GetReservations(c *gin.Context) {
 		})
 		return
 	}
-	req.Header.Set("X-User-Name", username)
 
-	ires, err := h.reservationCB.Execute(func() (interface{}, error) {
+	authToken := c.GetHeader("Authorization")
+	req.Header.Set("Authorization", authToken)
+
+	ires, err := h.reservationCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(req)
 	})
 	if err != nil {
@@ -332,8 +318,9 @@ func (h *Handler) GetReservations(c *gin.Context) {
 			})
 			return
 		}
+		req.Header.Set("Authorization", authToken)
 
-		ires, err := h.libraryCB.Execute(func() (interface{}, error) {
+		ires, err := h.libraryCB.Execute(func() (any, error) {
 			return http.DefaultClient.Do(req)
 		})
 		if err != nil {
@@ -388,8 +375,9 @@ func (h *Handler) GetReservations(c *gin.Context) {
 			})
 			return
 		}
+		reqLib.Header.Set("Authorization", authToken)
 
-		iresLib, err := h.libraryCB.Execute(func() (interface{}, error) {
+		iresLib, err := h.libraryCB.Execute(func() (any, error) {
 			return http.DefaultClient.Do(reqLib)
 		})
 		if err != nil {
@@ -449,15 +437,6 @@ func (h *Handler) GetReservations(c *gin.Context) {
 }
 
 func (h *Handler) CreateReservation(c *gin.Context) {
-	username := c.GetHeader("X-User-Name")
-
-	if username == "" {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
-		})
-		return
-	}
-
 	var inputCreateBody CreateReservationRequest
 
 	err := json.NewDecoder(c.Request.Body).Decode(&inputCreateBody)
@@ -479,9 +458,11 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
-	reqAmount.Header.Set("X-User-Name", username)
 
-	iresAmount, err := h.reservationCB.Execute(func() (interface{}, error) {
+	authToken := c.GetHeader("Authorization")
+	reqAmount.Header.Set("Authorization", authToken)
+
+	iresAmount, err := h.reservationCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(reqAmount)
 	})
 	if err != nil {
@@ -521,9 +502,9 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
-	reqRating.Header.Set("X-User-Name", username)
+	reqRating.Header.Set("Authorization", authToken)
 
-	iresRating, err := h.ratingCB.Execute(func() (interface{}, error) {
+	iresRating, err := h.ratingCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(reqRating)
 	})
 	if err != nil {
@@ -577,7 +558,7 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
-	reqCreate.Header.Set("X-User-Name", username)
+	reqCreate.Header.Set("Authorization", authToken)
 
 	resCreate, err := http.DefaultClient.Do(reqCreate)
 	if err != nil {
@@ -613,8 +594,9 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
+	reqBook.Header.Set("Authorization", authToken)
 
-	iresBook, err := h.libraryCB.Execute(func() (interface{}, error) {
+	iresBook, err := h.libraryCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(reqBook)
 	})
 	if err != nil {
@@ -653,8 +635,9 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
+	reqLib.Header.Set("Authorization", authToken)
 
-	iresLib, err := h.libraryCB.Execute(func() (interface{}, error) {
+	iresLib, err := h.libraryCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(reqLib)
 	})
 	if err != nil {
@@ -704,6 +687,7 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		})
 		return
 	}
+	reqCount.Header.Set("Authorization", authToken)
 
 	resCount, err := http.DefaultClient.Do(reqCount)
 	if err != nil {
@@ -726,15 +710,6 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 func (h *Handler) ReturnBook(c *gin.Context) {
 	resFee := 0
 
-	username := c.GetHeader("X-User-Name")
-
-	if username == "" {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
-		})
-		return
-	}
-
 	var inputUpdateBody UpdateReservationRequest
 
 	err := json.NewDecoder(c.Request.Body).Decode(&inputUpdateBody)
@@ -756,9 +731,11 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 		})
 		return
 	}
-	reqReserv.Header.Set("X-User-Name", username)
 
-	iresReserv, err := h.reservationCB.Execute(func() (interface{}, error) {
+	authToken := c.GetHeader("Authorization")
+	reqReserv.Header.Set("Authorization", authToken)
+
+	iresReserv, err := h.reservationCB.Execute(func() (any, error) {
 		return http.DefaultClient.Do(reqReserv)
 	})
 	if err != nil {
@@ -806,6 +783,8 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 		return
 	}
 
+	reqStatus.Header.Set("Authorization", authToken)
+
 	resStatus, err := http.DefaultClient.Do(reqStatus)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{
@@ -828,6 +807,7 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 		})
 		return
 	}
+	reqCondition.Header.Set("Authorization", authToken)
 
 	resCondition, err := http.DefaultClient.Do(reqCondition)
 	if err != nil {
@@ -851,10 +831,11 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 		})
 		return
 	}
+	reqCount.Header.Set("Authorization", authToken)
 
 	_, err = http.DefaultClient.Do(reqCount)
 	if err != nil {
-		job := jobqueue.NewExecJob(func() (interface{}, error) {
+		job := jobqueue.NewExecJob(func() (any, error) {
 			return http.DefaultClient.Do(reqCount)
 		})
 		h.jobScheduler.JobQueue <- job
@@ -887,13 +868,12 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 		})
 		return
 	}
-
-	reqUpdRating.Header.Set("X-User-Name", username)
+	reqUpdRating.Header.Set("Authorization", authToken)
 
 	_, err = http.DefaultClient.Do(reqUpdRating)
 	if err != nil {
 		c.Status(http.StatusNoContent)
-		job := jobqueue.NewExecJob(func() (interface{}, error) {
+		job := jobqueue.NewExecJob(func() (any, error) {
 			return http.DefaultClient.Do(reqUpdRating)
 		})
 		h.jobScheduler.JobQueue <- job

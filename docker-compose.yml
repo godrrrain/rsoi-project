@@ -14,12 +14,30 @@ services:
     ports:
       - "5432:5432"
 
+  idp-service:
+    build:
+      context: ./
+      dockerfile: ./src/idp-service/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=program
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=idp
+    ports:
+      - "8090:8090"
+    networks:
+      - default
+
   gateway-service:
     build:
       context: ./
       dockerfile: ./src/gateway-service/Dockerfile
     depends_on:
       - postgres
+      - idp-service
     ports:
       - "8080:8080"
 
@@ -29,6 +47,7 @@ services:
       dockerfile: ./src/reservation-service/Dockerfile
     depends_on:
       - postgres
+      - idp-service
     ports:
       - "8070:8070"
 
@@ -38,6 +57,7 @@ services:
       dockerfile: ./src/library-service/Dockerfile
     depends_on:
       - postgres
+      - idp-service
     ports:
       - "8060:8060"
 
@@ -47,8 +67,18 @@ services:
       dockerfile: ./src/rating-service/Dockerfile
     depends_on:
       - postgres
+      - idp-service
     ports:
       - "8050:8050"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
 
 volumes:
   db-data:

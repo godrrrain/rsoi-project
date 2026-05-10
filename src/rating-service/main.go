@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"lab2/src/middleware"
 	"lab2/src/rating-service/handler"
 	"lab2/src/rating-service/storage"
 
@@ -28,8 +29,10 @@ func main() {
 
 	router.Use(cors.Default())
 
-	router.GET("/api/v1/rating/", handler.GetRating)
-	router.PUT("/api/v1/rating/", handler.UpdateRating)
+	jwtMiddleware := middleware.NewJWTMiddleware("http://idp-service:8090")
+
+	router.GET("/api/v1/rating/", jwtMiddleware.Middleware(), handler.GetRating)
+	router.PUT("/api/v1/rating/", jwtMiddleware.Middleware(), handler.UpdateRating)
 
 	router.GET("/manage/health", handler.GetHealth)
 

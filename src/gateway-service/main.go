@@ -3,6 +3,7 @@ package main
 import (
 	"lab2/src/gateway-service/handler"
 	"lab2/src/jobqueue"
+	"lab2/src/middleware"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -31,12 +32,15 @@ func main() {
 
 	router.Use(cors.Default())
 
+	jwtMiddleware := middleware.NewJWTMiddleware("http://idp-service:8090")
+
 	router.GET("/api/v1/libraries", handler.GetLibrariesByCity)
 	router.GET("/api/v1/libraries/:uid/books/", handler.GetBooksByLibraryUid)
-	router.GET("/api/v1/rating/", handler.GetRating)
-	router.GET("/api/v1/reservations", handler.GetReservations)
-	router.POST("/api/v1/reservations", handler.CreateReservation)
-	router.POST("/api/v1/reservations/:uid/return", handler.ReturnBook)
+
+	router.GET("/api/v1/rating/", jwtMiddleware.Middleware(), handler.GetRating)
+	router.GET("/api/v1/reservations", jwtMiddleware.Middleware(), handler.GetReservations)
+	router.POST("/api/v1/reservations", jwtMiddleware.Middleware(), handler.CreateReservation)
+	router.POST("/api/v1/reservations/:uid/return", jwtMiddleware.Middleware(), handler.ReturnBook)
 
 	router.GET("/manage/health", handler.GetHealth)
 

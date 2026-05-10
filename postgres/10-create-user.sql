@@ -11,6 +11,9 @@ GRANT ALL PRIVILEGES ON DATABASE libraries TO program;
 CREATE DATABASE ratings;
 GRANT ALL PRIVILEGES ON DATABASE ratings TO program;
 
+CREATE DATABASE idp;
+GRANT ALL PRIVILEGES ON DATABASE idp TO program;
+
 
 \c reservations;
 
@@ -92,4 +95,46 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
 -- INSERT INTO rating VALUES (1, 'godrain', 20);
-INSERT INTO rating VALUES (1, 'Test Max', 20);
+INSERT INTO rating VALUES (1, 'test', 20);
+
+\c idp;
+
+CREATE TABLE idp_users (
+    id SERIAL PRIMARY KEY,
+    user_uid UUID NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255),
+    role VARCHAR(50) DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE auth_codes (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(255) NOT NULL UNIQUE,
+    user_uid UUID NOT NULL,
+    client_id VARCHAR(255) NOT NULL,
+    redirect_uri VARCHAR(1024) NOT NULL,
+    scope VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_uid) REFERENCES idp_users(user_uid)
+);
+
+CREATE TABLE refresh_tokens (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(511) NOT NULL UNIQUE,
+    user_uid UUID NOT NULL,
+    client_id VARCHAR(255) NOT NULL,
+    scope VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_uid) REFERENCES idp_users(user_uid)
+);
+
+GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
+
+INSERT INTO idp_users VALUES (1, '1ce9ed92-8548-4ed9-a18e-d96fb120e622', 'test', 'test@test.ru', '37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578', 'Test', 'admin');

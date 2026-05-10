@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"lab2/src/middleware"
 	"lab2/src/reservation-service/handler"
 	"lab2/src/reservation-service/storage"
 
@@ -28,11 +29,13 @@ func main() {
 
 	router.Use(cors.Default())
 
-	router.GET("/api/v1/reservations", handler.GetReservations)
-	router.GET("/api/v1/reservations/info/:uid", handler.GetReservationByUid)
-	router.GET("/api/v1/reservations/amount", handler.GetRentedReservationAmount)
-	router.POST("/api/v1/reservations", handler.CreateReservation)
-	router.PUT("/api/v1/reservations/:uid", handler.UpdateReservationStatus)
+	jwtMiddleware := middleware.NewJWTMiddleware("http://idp-service:8090")
+
+	router.GET("/api/v1/reservations", jwtMiddleware.Middleware(), handler.GetReservations)
+	router.GET("/api/v1/reservations/info/:uid", jwtMiddleware.Middleware(), handler.GetReservationByUid)
+	router.GET("/api/v1/reservations/amount", jwtMiddleware.Middleware(), handler.GetRentedReservationAmount)
+	router.POST("/api/v1/reservations", jwtMiddleware.Middleware(), handler.CreateReservation)
+	router.PUT("/api/v1/reservations/:uid", jwtMiddleware.Middleware(), handler.UpdateReservationStatus)
 
 	router.GET("/manage/health", handler.GetHealth)
 

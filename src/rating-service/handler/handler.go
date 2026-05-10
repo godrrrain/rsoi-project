@@ -32,12 +32,11 @@ func NewHandler(storage storage.Storage) *Handler {
 }
 
 func (h *Handler) GetRating(c *gin.Context) {
-
-	username := c.GetHeader("X-User-Name")
+	username := c.GetString("username")
 
 	if username == "" {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
+			Message: "empty username",
 		})
 		return
 	}
@@ -58,12 +57,11 @@ func (h *Handler) GetRating(c *gin.Context) {
 }
 
 func (h *Handler) UpdateRating(c *gin.Context) {
-
-	username := c.GetHeader("X-User-Name")
+	username := c.GetString("username")
 
 	if username == "" {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
+			Message: "empty username",
 		})
 		return
 	}

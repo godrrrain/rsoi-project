@@ -50,12 +50,11 @@ func NewHandler(storage storage.Storage) *Handler {
 }
 
 func (h *Handler) GetReservations(c *gin.Context) {
-
-	username := c.GetHeader("X-User-Name")
+	username := c.GetString("username")
 
 	if username == "" {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
+			Message: "empty username",
 		})
 		return
 	}
@@ -89,12 +88,11 @@ func (h *Handler) GetReservationByUid(c *gin.Context) {
 }
 
 func (h *Handler) GetRentedReservationAmount(c *gin.Context) {
-
-	username := c.GetHeader("X-User-Name")
+	username := c.GetString("username")
 
 	if username == "" {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
+			Message: "empty username",
 		})
 		return
 	}
@@ -113,12 +111,11 @@ func (h *Handler) GetRentedReservationAmount(c *gin.Context) {
 }
 
 func (h *Handler) CreateReservation(c *gin.Context) {
-
-	username := c.GetHeader("X-User-Name")
+	username := c.GetString("username")
 
 	if username == "" {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Message: "username must be given as X-User-Name Header",
+			Message: "empty username",
 		})
 		return
 	}

@@ -1422,7 +1422,7 @@
             "exec": [
               "pm.collectionVariables.set(\"libraryUid\", \"83575e12-7ce0-48ee-9931-51919ff3c9ee\")",
               "pm.collectionVariables.set(\"bookUid\", \"f7cdc58f-2caf-4b15-9727-f89dcc629b27\")",
-              "pm.collectionVariables.set(\"username\", \"Test Max\")"
+              "pm.collectionVariables.set(\"auth\", \"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtpZC0xIiwidHlwIjoiSldUIn0.eyJhdWQiOiJib29rcy1hcHAiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImV4cCI6MTc4MTAxNzc4MSwiaWF0IjoxNzc4NDI1NzgxLCJpc3MiOiJodHRwOi8vaWRwLXNlcnZpY2U6ODA5MCIsIm5hbWUiOiJUZXN0IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJhZG1pbiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzdWIiOiIxY2U5ZWQ5Mi04NTQ4LTRlZDktYTE4ZS1kOTZmYjEyMGU2MjIifQ.evJzBenla6CvySZ0RL1mlm9zLAzgsGfJulxb5dwUVtebc78CfOHC4FvVIKDynM7dvG44jvKRK1hV1c56ZH51B9XfeNxmpOOFbrRbLmZr-bXv-HRLyce6m2b_ExR6Mz7iQK95PAAPSKdKFdhPsJAMsY9NgCxoEzvjMIDXrUSj0YRQo4zgci63GPObKHMDEmZkTj4HFzI-VdqkdtkFsOAuNoWEAs58-yZBZi2tiIXN_JSGadR4c6cd75GXc6BOMo3_HUwwmR6yzm3sjhAwxnqaIgMSKP50m9rO4F9G3V4ei9Y2YoyTUXIOMtiwq-l2yEfGnKmsGEhYHLr3sJZghR83Ew\")"
             ]
           }
         },

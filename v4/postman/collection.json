@@ -1281,7 +1281,7 @@
                   "raw": "{\n    \"condition\": \"EXCELLENT\",\n    \"date\": \"2021-10-11\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/v1/reservations/:reservationUid/return",
+                  "raw": "{{baseUrl}}/api/v1/reservations/{{reservationUid}}/return",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -1289,15 +1289,8 @@
                     "api",
                     "v1",
                     "reservations",
-                    ":reservationUid",
+                    "{{reservationUid}}",
                     "return"
-                  ],
-                  "variable": [
-                    {
-                      "key": "reservationUid",
-                      "value": "{{reservationUid}}",
-                      "description": "UUID бронирования"
-                    }
                   ]
                 }
               },

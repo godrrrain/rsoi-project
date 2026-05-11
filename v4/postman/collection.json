@@ -22,7 +22,7 @@
                   "",
                   "    const pageSize = Number(pm.request.url.query.get(\"size\"))",
                   "    const city = decodeURIComponent(pm.request.url.query.get(\"city\"))",
-                  "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
+                  "    const libraryUid = pm.environment.get(\"libraryUid\")",
                   "",
                   "    const response = pm.response.json();",
                   "    pm.expect(response.items).to.be.an(\"array\")",
@@ -132,7 +132,7 @@
                   "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                   "",
                   "    const pageSize = Number(pm.request.url.query.get(\"size\"))",
-                  "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
+                  "    const bookUid = pm.environment.get(\"bookUid\")",
                   "",
                   "    const response = pm.response.json();",
                   "    pm.expect(response.items).to.be.an(\"array\")",
@@ -260,7 +260,7 @@
                   "",
                   "    const response = pm.response.json();",
                   "    pm.expect(response.stars).to.be.not.undefined",
-                  "    pm.collectionVariables.set(\"stars\", response.stars)",
+                  "    pm.environment.set(\"stars\", response.stars)",
                   "})"
                 ],
                 "type": "text/javascript",
@@ -341,8 +341,8 @@
                   "    pm.response.to.have.status(200)",
                   "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                   "",
-                  "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
-                  "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
+                  "    const bookUid = pm.environment.get(\"bookUid\")",
+                  "    const libraryUid = pm.environment.get(\"libraryUid\")",
                   "",
                   "    const response = pm.response.json();",
                   "    const request = JSON.parse(pm.request.body.raw)",
@@ -363,7 +363,7 @@
                   "    pm.expect(response.library.city).to.be.eq(\"Москва\")",
                   "    pm.expect(response.library.address).to.be.eq(\"2-я Бауманская ул., д.5, стр.1\")",
                   "",
-                  "    pm.collectionVariables.set(\"reservationUid\", response.reservationUid)",
+                  "    pm.environment.set(\"reservationUid\", response.reservationUid)",
                   "})"
                 ],
                 "type": "text/javascript",
@@ -465,9 +465,9 @@
                   "    pm.response.to.have.status(200)",
                   "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                   "",
-                  "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
-                  "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
-                  "    const reservationUid = pm.collectionVariables.get(\"reservationUid\")",
+                  "    const bookUid = pm.environment.get(\"bookUid\")",
+                  "    const libraryUid = pm.environment.get(\"libraryUid\")",
+                  "    const reservationUid = pm.environment.get(\"reservationUid\")",
                   "",
                   "    const response = pm.response.json();",
                   "    pm.expect(response).to.be.an(\"array\")",
@@ -662,7 +662,7 @@
                   "    pm.response.to.have.status(200)",
                   "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                   "",
-                  "    const stars = Number(pm.collectionVariables.get(\"stars\"))",
+                  "    const stars = Number(pm.environment.get(\"stars\"))",
                   "",
                   "    const response = pm.response.json();",
                   "    pm.expect(response.stars).to.be.eq(stars + 1)",
@@ -741,9 +741,9 @@
             "type": "text/javascript",
             "requests": {},
             "exec": [
-              "pm.collectionVariables.set(\"libraryUid\", \"83575e12-7ce0-48ee-9931-51919ff3c9ee\")",
-              "pm.collectionVariables.set(\"bookUid\", \"f7cdc58f-2caf-4b15-9727-f89dcc629b27\")",
-              "pm.collectionVariables.set(\"auth\", \"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtpZC0xIiwidHlwIjoiSldUIn0.eyJhdWQiOiJib29rcy1hcHAiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImV4cCI6MTc4MTAxNzc4MSwiaWF0IjoxNzc4NDI1NzgxLCJpc3MiOiJodHRwOi8vaWRwLXNlcnZpY2U6ODA5MCIsIm5hbWUiOiJUZXN0IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJhZG1pbiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzdWIiOiIxY2U5ZWQ5Mi04NTQ4LTRlZDktYTE4ZS1kOTZmYjEyMGU2MjIifQ.evJzBenla6CvySZ0RL1mlm9zLAzgsGfJulxb5dwUVtebc78CfOHC4FvVIKDynM7dvG44jvKRK1hV1c56ZH51B9XfeNxmpOOFbrRbLmZr-bXv-HRLyce6m2b_ExR6Mz7iQK95PAAPSKdKFdhPsJAMsY9NgCxoEzvjMIDXrUSj0YRQo4zgci63GPObKHMDEmZkTj4HFzI-VdqkdtkFsOAuNoWEAs58-yZBZi2tiIXN_JSGadR4c6cd75GXc6BOMo3_HUwwmR6yzm3sjhAwxnqaIgMSKP50m9rO4F9G3V4ei9Y2YoyTUXIOMtiwq-l2yEfGnKmsGEhYHLr3sJZghR83Ew\")"
+              "pm.environment.set(\"libraryUid\", \"83575e12-7ce0-48ee-9931-51919ff3c9ee\")",
+              "pm.environment.set(\"bookUid\", \"f7cdc58f-2caf-4b15-9727-f89dcc629b27\")",
+              "pm.environment.set(\"auth\", \"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtpZC0xIiwidHlwIjoiSldUIn0.eyJhdWQiOiJib29rcy1hcHAiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImV4cCI6MTc4MTAxNzc4MSwiaWF0IjoxNzc4NDI1NzgxLCJpc3MiOiJodHRwOi8vaWRwLXNlcnZpY2U6ODA5MCIsIm5hbWUiOiJUZXN0IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJhZG1pbiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzdWIiOiIxY2U5ZWQ5Mi04NTQ4LTRlZDktYTE4ZS1kOTZmYjEyMGU2MjIifQ.evJzBenla6CvySZ0RL1mlm9zLAzgsGfJulxb5dwUVtebc78CfOHC4FvVIKDynM7dvG44jvKRK1hV1c56ZH51B9XfeNxmpOOFbrRbLmZr-bXv-HRLyce6m2b_ExR6Mz7iQK95PAAPSKdKFdhPsJAMsY9NgCxoEzvjMIDXrUSj0YRQo4zgci63GPObKHMDEmZkTj4HFzI-VdqkdtkFsOAuNoWEAs58-yZBZi2tiIXN_JSGadR4c6cd75GXc6BOMo3_HUwwmR6yzm3sjhAwxnqaIgMSKP50m9rO4F9G3V4ei9Y2YoyTUXIOMtiwq-l2yEfGnKmsGEhYHLr3sJZghR83Ew\")"
             ]
           }
         },
@@ -778,7 +778,7 @@
                       "",
                       "    const pageSize = Number(pm.request.url.query.get(\"size\"))",
                       "    const city = decodeURIComponent(pm.request.url.query.get(\"city\"))",
-                      "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
+                      "    const libraryUid = pm.environment.get(\"libraryUid\")",
                       "",
                       "    const response = pm.response.json();",
                       "    pm.expect(response.items).to.be.an(\"array\")",
@@ -844,7 +844,7 @@
                       "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                       "",
                       "    const pageSize = Number(pm.request.url.query.get(\"size\"))",
-                      "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
+                      "    const bookUid = pm.environment.get(\"bookUid\")",
                       "",
                       "    const response = pm.response.json();",
                       "    pm.expect(response.items).to.be.an(\"array\")",
@@ -1022,7 +1022,7 @@
                       "",
                       "    const response = pm.response.json();",
                       "    pm.expect(response.stars).to.be.not.undefined",
-                      "    pm.collectionVariables.set(\"stars\", response.stars)",
+                      "    pm.environment.set(\"stars\", response.stars)",
                       "})"
                     ],
                     "type": "text/javascript",
@@ -1103,11 +1103,13 @@
                       "    pm.response.to.have.status(200)",
                       "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                       "",
-                      "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
-                      "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
+                      "    const bookUid = pm.environment.get(\"bookUid\")",
+                      "    const libraryUid = pm.environment.get(\"libraryUid\")",
                       "",
                       "    const response = pm.response.json();",
                       "    const request = JSON.parse(pm.request.body.raw)",
+                      "",
+                      "    pm.environment.set(\"reservationUid\", response.reservationUid)",
                       "",
                       "    pm.expect(response.status).to.be.eq(\"RENTED\")",
                       "    pm.expect(response.startDate).to.be.eq(moment().format(\"YYYY-MM-DD\"))",
@@ -1124,8 +1126,6 @@
                       "    pm.expect(response.library.name).to.be.eq(\"Библиотека имени 7 Непьющих\")",
                       "    pm.expect(response.library.city).to.be.eq(\"Москва\")",
                       "    pm.expect(response.library.address).to.be.eq(\"2-я Бауманская ул., д.5, стр.1\")",
-                      "",
-                      "    pm.collectionVariables.set(\"reservationUid\", response.reservationUid)",
                       "})"
                     ],
                     "type": "text/javascript",
@@ -1187,9 +1187,9 @@
                       "    pm.response.to.have.status(200)",
                       "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                       "",
-                      "    const bookUid = pm.collectionVariables.get(\"bookUid\")",
-                      "    const libraryUid = pm.collectionVariables.get(\"libraryUid\")",
-                      "    const reservationUid = pm.collectionVariables.get(\"reservationUid\")",
+                      "    const bookUid = pm.environment.get(\"bookUid\")",
+                      "    const libraryUid = pm.environment.get(\"libraryUid\")",
+                      "    const reservationUid = pm.environment.get(\"reservationUid\")",
                       "",
                       "    const response = pm.response.json();",
                       "    pm.expect(response).to.be.an(\"array\")",
@@ -1357,7 +1357,7 @@
                       "    pm.response.to.have.status(200)",
                       "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
                       "",
-                      "    const stars = Number(pm.collectionVariables.get(\"stars\"))",
+                      "    const stars = Number(pm.environment.get(\"stars\"))",
                       "",
                       "    const response = pm.response.json();",
                       "    pm.expect(response.stars).to.be.eq(stars + 1)",
@@ -1412,10 +1412,11 @@
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
+            "requests": {},
             "exec": [
-              "pm.collectionVariables.set(\"libraryUid\", \"83575e12-7ce0-48ee-9931-51919ff3c9ee\")",
-              "pm.collectionVariables.set(\"bookUid\", \"f7cdc58f-2caf-4b15-9727-f89dcc629b27\")",
-              "pm.collectionVariables.set(\"auth\", \"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtpZC0xIiwidHlwIjoiSldUIn0.eyJhdWQiOiJib29rcy1hcHAiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImV4cCI6MTc4MTAxNzc4MSwiaWF0IjoxNzc4NDI1NzgxLCJpc3MiOiJodHRwOi8vaWRwLXNlcnZpY2U6ODA5MCIsIm5hbWUiOiJUZXN0IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJhZG1pbiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzdWIiOiIxY2U5ZWQ5Mi04NTQ4LTRlZDktYTE4ZS1kOTZmYjEyMGU2MjIifQ.evJzBenla6CvySZ0RL1mlm9zLAzgsGfJulxb5dwUVtebc78CfOHC4FvVIKDynM7dvG44jvKRK1hV1c56ZH51B9XfeNxmpOOFbrRbLmZr-bXv-HRLyce6m2b_ExR6Mz7iQK95PAAPSKdKFdhPsJAMsY9NgCxoEzvjMIDXrUSj0YRQo4zgci63GPObKHMDEmZkTj4HFzI-VdqkdtkFsOAuNoWEAs58-yZBZi2tiIXN_JSGadR4c6cd75GXc6BOMo3_HUwwmR6yzm3sjhAwxnqaIgMSKP50m9rO4F9G3V4ei9Y2YoyTUXIOMtiwq-l2yEfGnKmsGEhYHLr3sJZghR83Ew\")"
+              "pm.environment.set(\"libraryUid\", \"83575e12-7ce0-48ee-9931-51919ff3c9ee\")",
+              "pm.environment.set(\"bookUid\", \"f7cdc58f-2caf-4b15-9727-f89dcc629b27\")",
+              "pm.environment.set(\"auth\", \"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtpZC0xIiwidHlwIjoiSldUIn0.eyJhdWQiOiJib29rcy1hcHAiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImV4cCI6MTc4MTAxNzc4MSwiaWF0IjoxNzc4NDI1NzgxLCJpc3MiOiJodHRwOi8vaWRwLXNlcnZpY2U6ODA5MCIsIm5hbWUiOiJUZXN0IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJhZG1pbiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzdWIiOiIxY2U5ZWQ5Mi04NTQ4LTRlZDktYTE4ZS1kOTZmYjEyMGU2MjIifQ.evJzBenla6CvySZ0RL1mlm9zLAzgsGfJulxb5dwUVtebc78CfOHC4FvVIKDynM7dvG44jvKRK1hV1c56ZH51B9XfeNxmpOOFbrRbLmZr-bXv-HRLyce6m2b_ExR6Mz7iQK95PAAPSKdKFdhPsJAMsY9NgCxoEzvjMIDXrUSj0YRQo4zgci63GPObKHMDEmZkTj4HFzI-VdqkdtkFsOAuNoWEAs58-yZBZi2tiIXN_JSGadR4c6cd75GXc6BOMo3_HUwwmR6yzm3sjhAwxnqaIgMSKP50m9rO4F9G3V4ei9Y2YoyTUXIOMtiwq-l2yEfGnKmsGEhYHLr3sJZghR83Ew\")"
             ]
           }
         },
@@ -1423,6 +1424,7 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
+            "requests": {},
             "exec": [
               ""
             ]
@@ -1461,23 +1463,7 @@
       "value": "http://localhost:8080"
     },
     {
-      "key": "libraryUid",
-      "value": ""
-    },
-    {
-      "key": "bookUid",
-      "value": ""
-    },
-    {
       "key": "stars",
-      "value": ""
-    },
-    {
-      "key": "reservationUid",
-      "value": ""
-    },
-    {
-      "key": "auth",
       "value": ""
     }
   ]

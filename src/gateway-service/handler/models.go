@@ -98,3 +98,17 @@ type UpdateReservationRequest struct {
 type ReservationAmount struct {
 	Amount int `json:"amount"`
 }
+
+type ReservationsResponse struct {
+	Reservation_uid string             `json:"reservationUid"`
+	Status          string             `json:"status"`
+	Start_date      string             `json:"startDate"`
+	Till_date       string             `json:"tillDate"`
+	Book            BookToUserResponse `json:"book"`
+	Library         LibraryResponse    `json:"library"`
+	Username        Username           `json:"username"`
+}
+
+type Username struct {
+	Name string `json:"name"`
+}

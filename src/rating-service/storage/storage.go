@@ -64,11 +64,19 @@ func (pg *postgres) GetRating(ctx context.Context, username string) (Rating, err
 	rating, err = pgx.CollectOneRow(rows, pgx.RowToStructByName[Rating])
 
 	if errors.Is(err, pgx.ErrNoRows) {
-		return rating, errors.New("username not found")
+		query := `INSERT INTO rating (username, stars) VALUES ($1, $2)`
+
+		_, err := pg.db.Exec(ctx, query, username, 20)
+		if err != nil {
+			return rating, fmt.Errorf("unable to insert row: %w", err)
+		}
+
+		return Rating{Username: username, Stars: 20}, nil
 	}
 
 	if err != nil {
 		fmt.Printf("CollectRows error: %v", err)
+
 		return rating, err
 	}
 
@@ -96,6 +104,7 @@ func (pg *postgres) UpdateRating(ctx context.Context, username string, stars int
 
 	if err != nil {
 		fmt.Printf("CollectRows error: %v", err)
+
 		return err
 	}
 

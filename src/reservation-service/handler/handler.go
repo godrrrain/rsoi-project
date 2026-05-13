@@ -72,6 +72,20 @@ func (h *Handler) GetReservations(c *gin.Context) {
 	c.JSON(http.StatusOK, ReservationsToResponse(reservations))
 }
 
+func (h *Handler) GetReservationsAll(c *gin.Context) {
+	reservations, err := h.storage.GetReservationsAll(context.Background())
+
+	if err != nil {
+		fmt.Printf("failed to get reservations %s\n", err.Error())
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, ReservationsToResponse(reservations))
+}
+
 func (h *Handler) GetReservationByUid(c *gin.Context) {
 
 	reservation, err := h.storage.GetReservationByUid(context.Background(), c.Param("uid"))

@@ -191,7 +191,7 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(302, "/oauth2/authorize")
+	c.Redirect(302, "/oauth2/authorize?client_id=books-app&redirect_uri=http://localhost:3000/callback&response_type=code&scope=openid+profile+email&state=ncu49a07i9zi6qjd6u3r")
 }
 
 func (h *Handler) Token(c *gin.Context) {
@@ -329,7 +329,7 @@ func (h *Handler) UserInfo(c *gin.Context) {
 		return
 	}
 
-	userInfo := map[string]interface{}{
+	userInfo := map[string]any{
 		"sub": (*claims)["sub"],
 	}
 

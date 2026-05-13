@@ -28,6 +28,7 @@ type ReservationAmount struct {
 
 type Storage interface {
 	GetReservations(ctx context.Context, username string) ([]Reservation, error)
+	GetReservationsAll(ctx context.Context) ([]Reservation, error)
 	GetReservationByUid(ctx context.Context, reservation_uid string) (Reservation, error)
 	GetRentedReservationAmount(ctx context.Context, username string) (ReservationAmount, error)
 	CreateReservation(ctx context.Context, username string, bookUid string, libraryUid string, tillDate string) (Reservation, error)
@@ -130,6 +131,28 @@ func (pg *postgres) GetReservationByUid(ctx context.Context, reservation_uid str
 func (pg *postgres) GetReservations(ctx context.Context, username string) ([]Reservation, error) {
 
 	query := fmt.Sprintf(`SELECT * FROM reservation WHERE username = '%s'`, username)
+
+	rows, err := pg.db.Query(ctx, query)
+
+	var reservations []Reservation
+
+	if err != nil {
+		return reservations, fmt.Errorf("unable to query: %w", err)
+	}
+	defer rows.Close()
+
+	reservations, err = pgx.CollectRows(rows, pgx.RowToStructByName[Reservation])
+	if err != nil {
+		fmt.Printf("CollectRows error: %v", err)
+		return reservations, err
+	}
+
+	return reservations, nil
+}
+
+func (pg *postgres) GetReservationsAll(ctx context.Context) ([]Reservation, error) {
+
+	query := `SELECT * FROM reservation`
 
 	rows, err := pg.db.Query(ctx, query)
 

@@ -30,7 +30,13 @@ func main() {
 
 	router := gin.Default()
 
-	router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	jwtMiddleware := middleware.NewJWTMiddleware("http://idp-service:8090")
 
@@ -39,6 +45,7 @@ func main() {
 
 	router.GET("/api/v1/rating/", jwtMiddleware.Middleware(), handler.GetRating)
 	router.GET("/api/v1/reservations", jwtMiddleware.Middleware(), handler.GetReservations)
+	router.GET("/api/v1/reservations/all", jwtMiddleware.Middleware(), handler.GetReservationsAll)
 	router.POST("/api/v1/reservations", jwtMiddleware.Middleware(), handler.CreateReservation)
 	router.POST("/api/v1/reservations/:uid/return", jwtMiddleware.Middleware(), handler.ReturnBook)
 

@@ -263,6 +263,13 @@ func (h *Handler) GetRating(c *gin.Context) {
 }
 
 func (h *Handler) GetReservations(c *gin.Context) {
+	role := c.GetString("role")
+	if role == "admin" {
+		h.GetReservationsAll(c)
+
+		return
+	}
+
 	requestURL := fmt.Sprintf("%s/api/v1/reservations/", reservationService)
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
@@ -429,6 +436,182 @@ func (h *Handler) GetReservations(c *gin.Context) {
 			Till_date:       reservation.Till_date,
 			Book:            book,
 			Library:         library,
+		}
+
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *Handler) GetReservationsAll(c *gin.Context) {
+	requestURL := fmt.Sprintf("%s/api/v1/reservations/all", reservationService)
+
+	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	authToken := c.GetHeader("Authorization")
+	req.Header.Set("Authorization", authToken)
+
+	ires, err := h.reservationCB.Execute(func() (any, error) {
+		return http.DefaultClient.Do(req)
+	})
+	if err != nil {
+		c.JSON(http.StatusServiceUnavailable, ErrorResponse{Message: "Reservation Service unavailable"})
+		return
+	}
+
+	res, ok := ires.(*http.Response)
+	if !ok {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	var reservations []ReservationResponse
+	if err = json.Unmarshal(resBody, &reservations); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	response := make([]ReservationsResponse, len(reservations))
+
+	for i, reservation := range reservations {
+		requestBookURL := fmt.Sprintf("%s/api/v1/books/%s/", libraryService, reservation.Book_uid)
+
+		req, err := http.NewRequest(http.MethodGet, requestBookURL, nil)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+		req.Header.Set("Authorization", authToken)
+
+		ires, err := h.libraryCB.Execute(func() (any, error) {
+			return http.DefaultClient.Do(req)
+		})
+		if err != nil {
+			var book BookToUserResponse
+			book.Book_uid = reservation.Book_uid
+
+			var library LibraryResponse
+			library.Library_uid = reservation.Library_uid
+
+			response[i] = ReservationsResponse{
+				Reservation_uid: reservation.Reservation_uid,
+				Status:          reservation.Status,
+				Start_date:      reservation.Start_date,
+				Till_date:       reservation.Till_date,
+				Book:            book,
+				Library:         library,
+			}
+
+			fmt.Println("Library Service unavailable")
+			continue
+		}
+
+		res, ok := ires.(*http.Response)
+		if !ok {
+			c.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+
+		resBody, err := io.ReadAll(res.Body)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
+		var book BookToUserResponse
+		if err = json.Unmarshal(resBody, &book); err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
+		requestLibraryURL := fmt.Sprintf("%s/api/v1/libraries/%s/", libraryService, reservation.Library_uid)
+
+		reqLib, err := http.NewRequest(http.MethodGet, requestLibraryURL, nil)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+		reqLib.Header.Set("Authorization", authToken)
+
+		iresLib, err := h.libraryCB.Execute(func() (any, error) {
+			return http.DefaultClient.Do(reqLib)
+		})
+		if err != nil {
+			var book BookToUserResponse
+			book.Book_uid = reservation.Book_uid
+
+			var library LibraryResponse
+			library.Library_uid = reservation.Library_uid
+
+			response[i] = ReservationsResponse{
+				Reservation_uid: reservation.Reservation_uid,
+				Status:          reservation.Status,
+				Start_date:      reservation.Start_date,
+				Till_date:       reservation.Till_date,
+				Book:            book,
+				Library:         library,
+			}
+
+			fmt.Println("Library Service unavailable")
+			continue
+		}
+
+		resLib, ok := iresLib.(*http.Response)
+		if !ok {
+			c.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+
+		resLibBody, err := io.ReadAll(resLib.Body)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
+		var library LibraryResponse
+		if err = json.Unmarshal(resLibBody, &library); err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
+		username := Username{Name: reservation.Username}
+
+		response[i] = ReservationsResponse{
+			Reservation_uid: reservation.Reservation_uid,
+			Status:          reservation.Status,
+			Start_date:      reservation.Start_date,
+			Till_date:       reservation.Till_date,
+			Book:            book,
+			Library:         library,
+			Username:        username,
 		}
 
 	}

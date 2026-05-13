@@ -1,0 +1,62 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, sans-serif;
+  background: #f5f8ff;
+  color: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #f5f8ff;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 24px;
+}
+
+.app-title {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.page-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.page-card h2,
+.page-card h3,
+.page-card h4 {
+  margin-top: 0;
+}
+
+.ant-layout {
+  background: transparent;
+}
+
+.ant-layout-content {
+  background: transparent;
+}
+
+@media (max-width: 840px) {
+  .app-header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}

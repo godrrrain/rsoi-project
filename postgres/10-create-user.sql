@@ -94,8 +94,8 @@ CREATE TABLE rating
 GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
--- INSERT INTO rating VALUES (1, 'godrain', 20);
-INSERT INTO rating VALUES (1, 'test', 20);
+INSERT INTO rating VALUES (1, 'admin', 20);
+INSERT INTO rating VALUES (2, 'user', 20);
 
 \c idp;
 
@@ -137,4 +137,5 @@ CREATE TABLE refresh_tokens (
 GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
-INSERT INTO idp_users VALUES (1, '1ce9ed92-8548-4ed9-a18e-d96fb120e622', 'test', 'test@test.ru', '37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578', 'Test', 'admin');
+INSERT INTO idp_users VALUES (1, '1ce9ed92-8548-4ed9-a18e-d96fb120e622', 'admin', 'admin@test.ru', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin');
+INSERT INTO idp_users VALUES (2, '2b1f83a3-9f95-4e5d-8f0f-3baf58c2f864', 'user', 'user@user.ru', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'User', 'user');

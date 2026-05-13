@@ -65,21 +65,10 @@ CREATE TABLE library_books
 GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
--- UPDATE library_books SET available_count = 0 WHERE book_id = 3;
--- SELECT books.*, library_books.available_count from library_books, books, library 
--- 	where books.book_uid = 'c6cdb5f4-40c2-4658-b71d-66385e8707ee' and library.id = library_books.library_id 
--- 	and books.id = library_books.book_id;
 
-INSERT INTO library VALUES (1, '83575e12-7ce0-48ee-9931-51919ff3c9ee', 'Библиотека имени 7 Непьющих', 'Москва', '2-я Бауманская ул., д.5, стр.1');
-INSERT INTO books VALUES (1, 'f7cdc58f-2caf-4b15-9727-f89dcc629b27', 'Краткий курс C++ в 7 томах', 'Бьерн Страуструп', 'Научная фантастика', 'EXCELLENT');
-INSERT INTO library_books VALUES (1, 1, 1);
-
--- INSERT INTO books VALUES (2, 'b0a67f71-c27b-4c1b-8360-6b9033157c3e', 'Облачный GO', 'Мэтью Титмус', 'Научная фантастика', 'EXCELLENT');
--- INSERT INTO library_books VALUES (2, 1, 2);
-
--- INSERT INTO library VALUES (2, 'd31f6751-9421-48af-9667-e5ca97bd6295', 'Библиотека имени Шоколада', 'Москва', 'Центральная ул., д.2, стр.1');
--- INSERT INTO books VALUES (3, 'c6cdb5f4-40c2-4658-b71d-66385e8707ee', 'Совершенный код', 'Стив Макконнелл', 'Научная фантастика', 'EXCELLENT');
--- INSERT INTO library_books VALUES (3, 2, 1);
+INSERT INTO library (library_uid, name, city, address) VALUES ('83575e12-7ce0-48ee-9931-51919ff3c9ee', 'Библиотека имени 7 Непьющих', 'Москва', '2-я Бауманская ул., д.5, стр.1');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('f7cdc58f-2caf-4b15-9727-f89dcc629b27', 'Краткий курс C++ в 7 томах', 'Бьерн Страуструп', 'Научная фантастика', 'EXCELLENT');
+INSERT INTO library_books (book_id, library_id, available_count)  VALUES (1, 1, 1);
 
 \c ratings;
 
@@ -94,8 +83,8 @@ CREATE TABLE rating
 GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
-INSERT INTO rating VALUES (1, 'admin', 20);
-INSERT INTO rating VALUES (2, 'user', 20);
+INSERT INTO rating (username, stars) VALUES ('admin', 20);
+INSERT INTO rating (username, stars) VALUES ('user', 20);
 
 \c idp;
 
@@ -137,5 +126,5 @@ CREATE TABLE refresh_tokens (
 GRANT ALL ON ALL TABLES IN SCHEMA public TO program;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
-INSERT INTO idp_users VALUES (1, '1ce9ed92-8548-4ed9-a18e-d96fb120e622', 'admin', 'admin@test.ru', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin');
-INSERT INTO idp_users VALUES (2, '2b1f83a3-9f95-4e5d-8f0f-3baf58c2f864', 'user', 'user@user.ru', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'User', 'user');
+INSERT INTO idp_users (user_uid, username, email, password_hash, full_name, role) VALUES ('1ce9ed92-8548-4ed9-a18e-d96fb120e622', 'admin', 'admin@test.ru', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Admin', 'admin');
+INSERT INTO idp_users (user_uid, username, email, password_hash, full_name, role) VALUES ('2b1f83a3-9f95-4e5d-8f0f-3baf58c2f864', 'user', 'user@user.ru', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'User', 'user');

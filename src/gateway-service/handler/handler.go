@@ -263,13 +263,6 @@ func (h *Handler) GetRating(c *gin.Context) {
 }
 
 func (h *Handler) GetReservations(c *gin.Context) {
-	role := c.GetString("role")
-	if role == "admin" {
-		h.GetReservationsAll(c)
-
-		return
-	}
-
 	requestURL := fmt.Sprintf("%s/api/v1/reservations/", reservationService)
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)

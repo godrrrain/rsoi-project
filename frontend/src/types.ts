@@ -41,6 +41,5 @@ export type Reservation = {
   library: Library;
   username: {
     name: string;
-    rating: number;
   };
 };

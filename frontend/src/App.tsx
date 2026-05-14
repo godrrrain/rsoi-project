@@ -30,6 +30,8 @@ import { generateRandomString } from "./helpers/generateRandomString";
 import getUserInfo from "./api/auth/getUserInfo";
 import login from "./api/auth/login";
 import { parseJWT } from "./helpers/parseJWT";
+import getUserReservationsAll from "./api/reservations/getUserReservationsAll";
+import getRating from "./api/auth/getRating";
 
 const { Header, Content } = Layout;
 const { Text } = Typography;
@@ -51,19 +53,23 @@ function App() {
   const state = urlParams.get("state");
 
   const checkToken = useCallback(async (token: string) => {
-    getUserInfo({ token }).then((response) => {
-      if (response) {
-        setCurrentUser({
-          id: response.sub,
-          name: response.name,
-          email: response.email,
-          password: "",
-          role: parseJWT(token)?.role || "user",
-          rating: 100,
-        });
-        message.success(`Вход выполнен как ${response.name}`);
+    getUserInfo({ token }).then((userInfoResponse) => {
+      if (userInfoResponse) {
+        getRating().then((ratingResponse) => {
+          setCurrentUser({
+            id: userInfoResponse.sub,
+            name: userInfoResponse.name,
+            email: userInfoResponse.email,
+            password: "",
+            role: parseJWT(token)?.role || "user",
+            rating: ratingResponse?.stars || 0,
+          });
+          message.success(`Вход выполнен как ${userInfoResponse.name}`);
 
-        navigate(response?.role === "admin" ? "/librarian" : "/reader");
+          navigate(
+            userInfoResponse?.role === "admin" ? "/librarian" : "/reader",
+          );
+        });
       } else {
         message.error("Ошибка входа");
       }
@@ -73,8 +79,6 @@ function App() {
   // Load user from localStorage
   useEffect(() => {
     if (code && state) {
-      console.log("code", code);
-
       login({ code }).then((response) => {
         if (response) {
           checkToken(response.access_token);
@@ -102,12 +106,19 @@ function App() {
   // Load reservations for current user
   useEffect(() => {
     if (currentUser) {
-      getUserReservations().then((response) => {
-        if (response) {
-          console.log(response);
-          setReservations(response);
-        }
-      });
+      if (currentUser.role === "admin") {
+        getUserReservationsAll().then((response) => {
+          if (response) {
+            setReservations(response);
+          }
+        });
+      } else {
+        getUserReservations().then((response) => {
+          if (response) {
+            setReservations(response);
+          }
+        });
+      }
     } else {
       setReservations([]);
     }
@@ -183,8 +194,10 @@ function App() {
       });
 
       if (reservation) {
-        console.log("reservation", reservation);
-        setReservations((prev) => [...prev, reservation]);
+        setReservations((prev) => [
+          ...prev,
+          { ...reservation, username: { name: currentUser.name } },
+        ]);
 
         // Update books state
         setBooks((prev) =>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import {
   Button,
   Form,
@@ -22,6 +22,16 @@ function LibrarianPage({ reservations, onReturn }: Props) {
   const [search, setSearch] = useState("");
   const [returnModalOpen, setReturnModalOpen] = useState(false);
   const [returnReservationUid, setReturnReservationUid] = useState<string>("");
+
+  const filteredReservations = useMemo(() => {
+    if (!search.trim()) {
+      return reservations;
+    }
+
+    return reservations.filter((reservation) =>
+      reservation.username?.name?.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [reservations, search]);
 
   const columns = [
     { title: "Читатель", dataIndex: ["username", "name"], key: "username" },
@@ -84,7 +94,7 @@ function LibrarianPage({ reservations, onReturn }: Props) {
         <Title level={4}>Забронированные книги</Title>
         <Table
           columns={columns}
-          dataSource={reservations}
+          dataSource={filteredReservations}
           rowKey="reservationUid"
           pagination={false}
           locale={{ emptyText: "Нет забронированных книг" }}

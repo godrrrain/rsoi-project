@@ -1,7 +1,7 @@
 import { API_ROUTER_URL } from "../../constants";
 
-async function getUserReservations() {
-  const url = `${API_ROUTER_URL}/reservations`;
+async function getRating() {
+  const url = `${API_ROUTER_URL}/rating/`;
 
   const token = localStorage.getItem("access_token");
 
@@ -21,4 +21,4 @@ async function getUserReservations() {
   }
 }
 
-export default getUserReservations;
+export default getRating;

@@ -75,6 +75,15 @@ services:
     ports:
       - "8050:8050"
 
+  statistics-service:
+    build:
+      context: ./
+      dockerfile: ./src/statistics-service/Dockerfile
+    depends_on:
+      - kafka
+    ports:
+      - "8040:8040"
+
   frontend:
     build:
       context: ./frontend
@@ -112,14 +121,11 @@ services:
         EXTERNAL://:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP:
         INTERNAL:PLAINTEXT,
-        DOCKER:SASL_PLAINTEXT,
+        DOCKER:PLAINTEXT,
         EXTERNAL:PLAINTEXT
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
       ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_SASL_ENABLED_MECHANISMS: "SCRAM-SHA-256"
-      KAFKA_CLIENT_USERS: "test"
-      KAFKA_CLIENT_PASSWORDS: "test"
     depends_on:
       - zookeeper
     healthcheck:

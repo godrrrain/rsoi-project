@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"lab2/src/kafka"
 	"lab2/src/middleware"
 	"lab2/src/rating-service/handler"
 	"lab2/src/rating-service/storage"
@@ -23,7 +24,15 @@ func main() {
 	}
 	defer psqlDB.Close()
 
-	handler := handler.NewHandler(psqlDB)
+	producer, err := kafka.NewSyncProducer([]string{"kafka:9092"})
+	if err != nil {
+		fmt.Printf("kafka producer init: %s", err)
+	} else {
+		fmt.Println("Connected to Kafka for rating service")
+	}
+	defer kafka.CloseProducer(producer)
+
+	handler := handler.NewHandler(psqlDB, producer)
 
 	router := gin.Default()
 

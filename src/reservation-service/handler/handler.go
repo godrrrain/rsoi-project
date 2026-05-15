@@ -9,6 +9,7 @@ import (
 
 	"lab2/src/reservation-service/storage"
 
+	"github.com/IBM/sarama"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,8 @@ type MessageResponse struct {
 }
 
 type Handler struct {
-	storage storage.Storage
+	storage  storage.Storage
+	producer sarama.SyncProducer
 }
 
 type RequestCreateReservation struct {
@@ -45,8 +47,8 @@ type ReservationResponse struct {
 	Till_date       string `json:"tillDate"`
 }
 
-func NewHandler(storage storage.Storage) *Handler {
-	return &Handler{storage: storage}
+func NewHandler(storage storage.Storage, producer sarama.SyncProducer) *Handler {
+	return &Handler{storage: storage, producer: producer}
 }
 
 func (h *Handler) GetReservations(c *gin.Context) {
@@ -155,11 +157,12 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		return
 	}
 
+	h.sendEvent("Книгу забронировали")
+
 	c.JSON(http.StatusOK, ReservationToResponse(reservation))
 }
 
 func (h *Handler) UpdateReservationStatus(c *gin.Context) {
-
 	reservation, err := h.storage.GetReservationByUid(context.Background(), c.Param("uid"))
 
 	if err != nil {
@@ -204,11 +207,15 @@ func (h *Handler) UpdateReservationStatus(c *gin.Context) {
 	}
 
 	if status == "EXPIRED" {
+		h.sendEvent("Книгу вернули с опозданием")
+
 		c.JSON(http.StatusNoContent, MessageResponse{
 			Message: "status updated",
 		})
 		return
 	}
+
+	h.sendEvent("Книгу вернули вовремя")
 
 	c.JSON(http.StatusOK, MessageResponse{
 		Message: "status updated",
@@ -243,4 +250,22 @@ func ReservationsToResponse(reservations []storage.Reservation) []ReservationRes
 
 func (h *Handler) GetHealth(c *gin.Context) {
 	c.Status(http.StatusOK)
+}
+
+func (h *Handler) sendEvent(event string) {
+	if h.producer == nil {
+		return
+	}
+
+	const topic = "events"
+
+	msg := &sarama.ProducerMessage{
+		Topic: topic,
+		Value: sarama.StringEncoder(event),
+	}
+
+	_, _, err := h.producer.SendMessage(msg)
+	if err != nil {
+		fmt.Printf("failed to send kafka event: %s\n", err.Error())
+	}
 }

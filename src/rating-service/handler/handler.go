@@ -29,6 +29,11 @@ type RatingResponse struct {
 	Stars int `json:"stars"`
 }
 
+type UpdateRatingRequest struct {
+	Stars    int    `json:"stars"`
+	Username string `json:"username"`
+}
+
 func NewHandler(storage storage.Storage, producer sarama.SyncProducer) *Handler {
 	return &Handler{storage: storage, producer: producer}
 }
@@ -68,7 +73,7 @@ func (h *Handler) UpdateRating(c *gin.Context) {
 		return
 	}
 
-	var reqRating RatingResponse
+	var reqRating UpdateRatingRequest
 
 	err := json.NewDecoder(c.Request.Body).Decode(&reqRating)
 	if err != nil {
@@ -77,6 +82,10 @@ func (h *Handler) UpdateRating(c *gin.Context) {
 			Message: err.Error(),
 		})
 		return
+	}
+
+	if reqRating.Username != "" {
+		username = reqRating.Username
 	}
 
 	err = h.storage.UpdateRating(context.Background(), username, reqRating.Stars)

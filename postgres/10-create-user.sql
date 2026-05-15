@@ -67,8 +67,25 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO program;
 
 
 INSERT INTO library (library_uid, name, city, address) VALUES ('83575e12-7ce0-48ee-9931-51919ff3c9ee', 'Библиотека имени 7 Непьющих', 'Москва', '2-я Бауманская ул., д.5, стр.1');
+INSERT INTO library (library_uid, name, city, address) VALUES ('d6a8b7f2-1d0e-4c3b-9f54-1ebc8a7f2b33', 'Московская районная библиотека', 'Москва', 'ул. Академика Сахарова, д. 12');
+INSERT INTO library (library_uid, name, city, address) VALUES ('a8f5c8d4-3c72-4f2e-9a44-5f2c0d3a6e11', 'Центральная библиотека Города', 'Санкт-Петербург', 'Невский проспект, д. 28');
+INSERT INTO library (library_uid, name, city, address) VALUES ('b4d3f7e1-99de-4c56-8bf8-2f0b9d2c6a22', 'Детская библиотека Солнечная', 'Челябинск', 'ул. Кирова, д. 15');
+
 INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('f7cdc58f-2caf-4b15-9727-f89dcc629b27', 'Краткий курс C++ в 7 томах', 'Бьерн Страуструп', 'Научная фантастика', 'EXCELLENT');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('c31d2f41-2f5a-4e5d-8f81-1c6b2a7e9d33', 'Война и мир', 'Лев Толстой', 'Историческая проза', 'GOOD');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('d52e3a65-66a7-4a89-bc73-2f9f0f8e5b44', 'Мастер и Маргарита', 'Михаил Булгаков', 'Магический реализм', 'EXCELLENT');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('e64f7b28-98d2-4f90-a7ed-8e0c6d1a0f55', 'Приключения Шерлока Холмса', 'Артур Конан Дойл', 'Детектив', 'GOOD');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('f75a8c93-7b54-4c21-a23f-9d3b4e7a1c66', 'Азбука путешествий', 'Анна Петрова', 'Путешествия', 'BAD');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('c46b8b3f-d102-41f5-875f-b89ac0b5a24a', 'Москва в книгах и легендах', 'Екатерина Орлова', 'Городской путеводитель', 'GOOD');
+INSERT INTO books (book_uid, name, author, genre, condition) VALUES ('b0fdb3b9-cee4-4924-9217-c2c19d1d1fd2', 'Истории Московских улиц', 'Иван Смирнов', 'История', 'EXCELLENT');
+
 INSERT INTO library_books (book_id, library_id, available_count)  VALUES (1, 1, 1);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (6, 2, 2);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (7, 2, 1);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (2, 3, 2);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (3, 3, 1);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (4, 4, 3);
+INSERT INTO library_books (book_id, library_id, available_count) VALUES (5, 4, 2);
 
 \c ratings;
 

@@ -49,6 +49,8 @@ func main() {
 	router.POST("/api/v1/reservations", jwtMiddleware.Middleware(), handler.CreateReservation)
 	router.POST("/api/v1/reservations/:uid/return", jwtMiddleware.Middleware(), handler.ReturnBook)
 
+	router.GET("/api/v1/statistics", jwtMiddleware.Middleware(), handler.Stats)
+
 	router.GET("/manage/health", handler.GetHealth)
 
 	router.Run()

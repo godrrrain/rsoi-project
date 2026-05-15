@@ -262,6 +262,38 @@ func (h *Handler) GetRating(c *gin.Context) {
 	})
 }
 
+func (h *Handler) Stats(c *gin.Context) {
+	requestURL := fmt.Sprintf("%s/api/v1/statistics", statisticsService)
+
+	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	authToken := c.GetHeader("Authorization")
+	req.Header.Set("Authorization", authToken)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		c.JSON(http.StatusServiceUnavailable, ErrorResponse{Message: "Statistics Service unavailable"})
+		return
+	}
+	defer res.Body.Close()
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	c.Data(res.StatusCode, "application/json", resBody)
+}
+
 func (h *Handler) GetReservations(c *gin.Context) {
 	requestURL := fmt.Sprintf("%s/api/v1/reservations/", reservationService)
 
@@ -1018,7 +1050,7 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 	}
 
 	//update rating
-	var rating RatingResponse
+	var rating UpdateRatingRequest
 
 	if resFee != 0 {
 		resFee = resFee * -10
@@ -1027,6 +1059,7 @@ func (h *Handler) ReturnBook(c *gin.Context) {
 	}
 
 	rating.Stars = resFee
+	rating.Username = reservation.Username
 
 	requestUpdRatingURL := fmt.Sprintf("%s/api/v1/rating/", ratingService)
 

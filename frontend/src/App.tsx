@@ -14,12 +14,14 @@ import {
   LogoutOutlined,
   TeamOutlined,
   UserOutlined,
+  BarChartOutlined,
 } from "@ant-design/icons";
 import { Book, Library, Reservation, User } from "./types";
 import LibrariesPage from "./pages/LibrariesPage";
 import LibraryBooksPage from "./pages/LibraryBooksPage";
 import ReaderPage from "./pages/ReaderPage";
 import LibrarianPage from "./pages/LibrarianPage";
+import StatisticsPage from "./pages/StatisticsPage";
 import { CLIENT_ID, DEFAULT_CITY, IDP_URL, REDIRECT_URI } from "./constants";
 import getLibraries from "./api/libraries/getLibraries";
 import getBooksByLibrary from "./api/libraries/getBooksByLibrary";
@@ -143,6 +145,11 @@ function App() {
       label: <Link to="/librarian">Библиотекарь</Link>,
       key: "/librarian",
       icon: <TeamOutlined />,
+    },
+    currentUser?.role === "admin" && {
+      label: <Link to="/statistics">Статистика</Link>,
+      key: "/statistics",
+      icon: <BarChartOutlined />,
     },
   ].filter(Boolean) as any[];
 
@@ -385,6 +392,16 @@ function App() {
                   reservations={reservations}
                   onReturn={handleReturn}
                 />
+              ) : (
+                <Navigate to="/libraries" replace />
+              )
+            }
+          />
+          <Route
+            path="/statistics"
+            element={
+              currentUser?.role === "admin" ? (
+                <StatisticsPage />
               ) : (
                 <Navigate to="/libraries" replace />
               )

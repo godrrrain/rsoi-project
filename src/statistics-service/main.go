@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"lab2/src/middleware"
 	"lab2/src/statistics-service/groupconsumer"
 	"lab2/src/statistics-service/handler"
 	"log"
@@ -51,6 +52,8 @@ func main() {
 		}
 	}()
 
+	jwtMiddleware := middleware.NewJWTMiddleware("http://idp-service:8090")
+
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -60,7 +63,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	router.GET("/api/v1/statistics", func(c *gin.Context) {
+	router.GET("/api/v1/statistics", jwtMiddleware.Middleware(), func(c *gin.Context) {
 		c.JSON(http.StatusOK, consumer.Stats())
 	})
 	router.GET("/manage/health", func(c *gin.Context) {

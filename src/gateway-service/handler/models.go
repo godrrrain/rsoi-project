@@ -4,6 +4,7 @@ const (
 	ratingService      string = "http://rating-service:8050"
 	libraryService     string = "http://library-service:8060"
 	reservationService string = "http://reservation-service:8070"
+	statisticsService  string = "http://statistics-service:8040"
 )
 
 type ErrorResponse struct {
@@ -53,6 +54,11 @@ type BookLimited struct {
 
 type RatingResponse struct {
 	Stars int `json:"stars"`
+}
+
+type UpdateRatingRequest struct {
+	Stars    int    `json:"stars"`
+	Username string `json:"username"`
 }
 
 type ReservationResponse struct {
